@@ -28,7 +28,7 @@ EXPOSE 3000
 
 
 # Étape 8 : Lancer l'application
-CMD ["npx", "ts-node-dev", "--respawn", "src/index.ts"]
+CMD ["npx", "ts-node-dev", "--respawn", "dist/server.js"]
 
 
 
