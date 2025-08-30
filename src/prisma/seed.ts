@@ -29,18 +29,18 @@ async function main() {
  await prisma.utilisateur.createMany({
    data: [
      {
-       nom: "Samb",
-       prenom: "Ngoné",
-       email: "ngone.samb@example.com",
+       nom: "Sane",
+       prenom: "Ousseynou",
+       email: "saneOuseynou@gmail.com",
        password: "password123",
        adresse: "123 Rue Principale, Dakar",
-       telephone: "+221 77 123 45 67",
+       telephone: "+221 78 011 82 23",
        profilId: adminProfil.id,
      },
      {
-       nom: "Diallo",
-       prenom: "Mamadou",
-       email: "mamadou.diallo@example.com",
+       nom: "Ka",
+       prenom: "mamebousso",
+       email: "mamebousso@gmail.com",
        password: "password123",
        adresse: "456 Avenue de la République, Dakar",
        telephone: "+221 77 765 43 21",
@@ -48,9 +48,9 @@ async function main() {
        promotionId: promo2025.id,
      },
      {
-       nom: "Fall",
-       prenom: "Awa",
-       email: "awa.fall@example.com",
+       nom: "Wane",
+       prenom: "Baila",
+       email: "wanebaila@gmail.com",
        password: "password123",
        adresse: "789 Boulevard de l'Indépendance, Dakar",
        telephone: "+221 77 987 65 43",

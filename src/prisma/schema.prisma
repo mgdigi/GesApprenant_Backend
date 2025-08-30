@@ -19,19 +19,23 @@ model Utilisateur {
   id        Int     @id @default(autoincrement())
   nom       String
   prenom    String
-  email     String  @unique
-  password  String
-  photo     String?
+  email  String
+  photo     String  @unique
+  password     String?
   adresse   String?
   telephone String?
   profilId  Int
+  niveauId int
   statutAD  String?
 
   profil      Profil     @relation(fields: [profilId], references: [id])
+  niveau      Niveau     @relation(fields: [niveauId], references: [id])
   promotionId Int?
   promotion   Promotion? @relation(fields: [promotionId], references: [id])
   briefs      Brief[]
   posts       Post[]
+  profilsortie ProfilSortie[]
+
 }
 
 // ------------------------- PROMOTION -------------------------
@@ -44,7 +48,9 @@ model Promotion {
   nombreRefs      Int
   niveau          String
   statut          String
+  niveauId        int
 
+  niveau      Niveau     @relation(fields: [niveauId], references: [id])
   utilisateurs Utilisateur[]
   referentiels Referentiel[]
 }
@@ -201,4 +207,17 @@ model VoteSolution {
   commentaire String
   solutionId  Int
   solution    Solution @relation(fields: [solutionId], references: [id])
+}
+
+model ProfilSortie {
+  id Int @id @default(autoincrement())
+  libelle String 
+  utilisateurs Utilisateur[]
+}
+
+model Niveau{
+  id          Int      @id @default(autoincrement())
+  libelle String 
+  utilisateurs Utilisateur[]
+  promotion Promotion[]
 }
