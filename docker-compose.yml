@@ -1,3 +1,4 @@
+
 version: '3.9'
 
 services:
@@ -46,8 +47,7 @@ services:
     networks:
       - app_network
 
-
-
 networks:
   app_network:
     driver: bridge
+
