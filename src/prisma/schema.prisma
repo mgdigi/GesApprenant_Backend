@@ -1,0 +1,204 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ------------------------- PROFIL -------------------------
+model Profil {
+  id           Int           @id @default(autoincrement())
+  libelle      String
+  utilisateurs Utilisateur[]
+}
+
+// ------------------------- UTILISATEUR -------------------------
+model Utilisateur {
+  id        Int     @id @default(autoincrement())
+  nom       String
+  prenom    String
+  email     String  @unique
+  password  String
+  photo     String?
+  adresse   String?
+  telephone String?
+  profilId  Int
+  statutAD  String?
+
+  profil      Profil     @relation(fields: [profilId], references: [id])
+  promotionId Int?
+  promotion   Promotion? @relation(fields: [promotionId], references: [id])
+  briefs      Brief[]
+  posts       Post[]
+}
+
+// ------------------------- PROMOTION -------------------------
+model Promotion {
+  id              Int    @id @default(autoincrement())
+  libelle         String
+  dateDebut       String
+  dateFin         String
+  nombreApprenant Int
+  nombreRefs      Int
+  niveau          String
+  statut          String
+
+  utilisateurs Utilisateur[]
+  referentiels Referentiel[]
+}
+
+// ------------------------- REFERENTIEL -------------------------
+model Referentiel {
+  id              Int     @id @default(autoincrement())
+  nom             String
+  description     String
+  nombreApprenant Int
+  nombreFormateur Int
+  nombreSession   String?
+
+  sessions    Session[]
+  briefs      Brief[]
+  promotionId Int?
+  promotion   Promotion? @relation(fields: [promotionId], references: [id])
+}
+
+// ------------------------- SESSION -------------------------
+model Session {
+  id            Int          @id @default(autoincrement())
+  libelle       String
+  referentielId Int?
+  referentiel   Referentiel? @relation(fields: [referentielId], references: [id])
+}
+
+// ------------------------- COMPETENCE -------------------------
+model Competence {
+  id      Int     @id @default(autoincrement())
+  libelle String
+  briefs  Brief[] @relation("BriefCompetences")
+}
+
+// ------------------------- BRIEF -------------------------
+model Brief {
+  id               Int    @id @default(autoincrement())
+  titre            String
+  enonce           String
+  datePublication  String
+  echeance         String
+  statutValidation String
+  etat             String
+  acquisvise       String
+  contraintes      String
+
+  referentiels       Referentiel[]
+  competences        Competence[]       @relation("BriefCompetences")
+  tags               Tag[]              @relation("BriefTags")
+  utilisateurs       Utilisateur[]
+  briefsAffectations BriefAffectation[]
+  groupes            Groupe[]
+  livrablesAttendus  LivrableAttendu[]
+  corrections        Correction[]
+}
+
+// ------------------------- LIVRABLE -------------------------
+model LivrableAttendu {
+  id            Int    @id @default(autoincrement())
+  nom           String
+  type          String
+  description   String
+  statut        String
+  etat          String
+  dateLivraison String
+
+  briefId           Int?
+  brief             Brief?            @relation(fields: [briefId], references: [id])
+  ressources        Ressource[]
+  livrablesPartiels LivrablePartiel[]
+}
+
+model LivrablePartiel {
+  id             Int    @id @default(autoincrement())
+  nom            String
+  type           String
+  fonctionnalite String
+  statut         String
+
+  livrableAttenduId Int
+  livrableAttendu   LivrableAttendu @relation(fields: [livrableAttenduId], references: [id])
+}
+
+// ------------------------- RESSOURCE -------------------------
+model Ressource {
+  id                Int             @id @default(autoincrement())
+  typeRessource     String
+  ressource         String
+  livrableAttenduId Int
+  livrableAttendu   LivrableAttendu @relation(fields: [livrableAttenduId], references: [id])
+}
+
+// ------------------------- TAG -------------------------
+model Tag {
+  id      Int     @id @default(autoincrement())
+  libelle String
+  briefs  Brief[] @relation("BriefTags")
+}
+
+// ------------------------- CORRECTION -------------------------
+model Correction {
+  id                   Int    @id @default(autoincrement())
+  etat                 String
+  note                 Int
+  commentaireFormateur String
+  dateCorrection       String
+  briefId              Int
+  brief                Brief  @relation(fields: [briefId], references: [id])
+}
+
+// ------------------------- GROUPE -------------------------
+model Groupe {
+  id          Int     @id @default(autoincrement())
+  nom         String
+  effectif    Int
+  description String?
+  briefs      Brief[]
+}
+
+// ------------------------- BRIEFAFFECTATION -------------------------
+model BriefAffectation {
+  id              Int    @id @default(autoincrement())
+  cibleType       String
+  dateAffectation String
+  briefId         Int
+  brief           Brief  @relation(fields: [briefId], references: [id])
+}
+
+// ------------------------- POST / SOLUTION / VOTE -------------------------
+model Post {
+  id              Int         @id @default(autoincrement())
+  titre           String
+  description     String
+  datePublication String
+  contenu         String
+  utilisateurId   Int
+  utilisateur     Utilisateur @relation(fields: [utilisateurId], references: [id])
+  solutions       Solution[]
+}
+
+model Solution {
+  id              Int            @id @default(autoincrement())
+  contenu         String
+  datePublication String
+  postId          Int
+  post            Post           @relation(fields: [postId], references: [id])
+  votes           VoteSolution[]
+}
+
+model VoteSolution {
+  id          Int      @id @default(autoincrement())
+  note        Int
+  dateVote    String
+  commentaire String
+  solutionId  Int
+  solution    Solution @relation(fields: [solutionId], references: [id])
+}
