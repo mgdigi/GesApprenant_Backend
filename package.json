@@ -5,13 +5,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npx tsc",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "seed": "npm run build && node -r dotenv/config dist/prisma/seed.js",
+    "dev": "nodemon dist/server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^24.3.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
   },
   "dependencies": {
@@ -20,6 +24,7 @@
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "mysql": "^2.18.1",
+    "nodemon": "^3.1.10",
     "prisma": "^6.15.0",
     "zod": "^4.1.5"
   }

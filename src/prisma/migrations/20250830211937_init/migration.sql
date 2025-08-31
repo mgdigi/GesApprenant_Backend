@@ -12,15 +12,17 @@ CREATE TABLE `Utilisateur` (
     `nom` VARCHAR(191) NOT NULL,
     `prenom` VARCHAR(191) NOT NULL,
     `email` VARCHAR(191) NOT NULL,
-    `password` VARCHAR(191) NOT NULL,
     `photo` VARCHAR(191) NULL,
+    `password` VARCHAR(191) NOT NULL,
     `adresse` VARCHAR(191) NULL,
     `telephone` VARCHAR(191) NULL,
     `profilId` INTEGER NOT NULL,
+    `niveauId` INTEGER NULL,
     `statutAD` VARCHAR(191) NULL,
+    `referentielId` INTEGER NULL,
     `promotionId` INTEGER NULL,
 
-    UNIQUE INDEX `Utilisateur_email_key`(`email`),
+    UNIQUE INDEX `Utilisateur_photo_key`(`photo`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -32,8 +34,8 @@ CREATE TABLE `Promotion` (
     `dateFin` VARCHAR(191) NOT NULL,
     `nombreApprenant` INTEGER NOT NULL,
     `nombreRefs` INTEGER NOT NULL,
-    `niveau` VARCHAR(191) NOT NULL,
     `statut` VARCHAR(191) NOT NULL,
+    `niveauId` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -193,6 +195,40 @@ CREATE TABLE `VoteSolution` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `ProfilSortie` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `libelle` VARCHAR(191) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Niveau` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `libelle` VARCHAR(191) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `_CompetenceToNiveau` (
+    `A` INTEGER NOT NULL,
+    `B` INTEGER NOT NULL,
+
+    UNIQUE INDEX `_CompetenceToNiveau_AB_unique`(`A`, `B`),
+    INDEX `_CompetenceToNiveau_B_index`(`B`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `_CompetenceToReferentiel` (
+    `A` INTEGER NOT NULL,
+    `B` INTEGER NOT NULL,
+
+    UNIQUE INDEX `_CompetenceToReferentiel_AB_unique`(`A`, `B`),
+    INDEX `_CompetenceToReferentiel_B_index`(`B`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `_BriefToReferentiel` (
     `A` INTEGER NOT NULL,
     `B` INTEGER NOT NULL,
@@ -237,11 +273,38 @@ CREATE TABLE `_BriefToGroupe` (
     INDEX `_BriefToGroupe_B_index`(`B`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- CreateTable
+CREATE TABLE `_ProfilSortieToUtilisateur` (
+    `A` INTEGER NOT NULL,
+    `B` INTEGER NOT NULL,
+
+    UNIQUE INDEX `_ProfilSortieToUtilisateur_AB_unique`(`A`, `B`),
+    INDEX `_ProfilSortieToUtilisateur_B_index`(`B`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `_ProfilSortieToPromotion` (
+    `A` INTEGER NOT NULL,
+    `B` INTEGER NOT NULL,
+
+    UNIQUE INDEX `_ProfilSortieToPromotion_AB_unique`(`A`, `B`),
+    INDEX `_ProfilSortieToPromotion_B_index`(`B`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- AddForeignKey
 ALTER TABLE `Utilisateur` ADD CONSTRAINT `Utilisateur_profilId_fkey` FOREIGN KEY (`profilId`) REFERENCES `Profil`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE `Utilisateur` ADD CONSTRAINT `Utilisateur_niveauId_fkey` FOREIGN KEY (`niveauId`) REFERENCES `Niveau`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Utilisateur` ADD CONSTRAINT `Utilisateur_referentielId_fkey` FOREIGN KEY (`referentielId`) REFERENCES `Referentiel`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `Utilisateur` ADD CONSTRAINT `Utilisateur_promotionId_fkey` FOREIGN KEY (`promotionId`) REFERENCES `Promotion`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Promotion` ADD CONSTRAINT `Promotion_niveauId_fkey` FOREIGN KEY (`niveauId`) REFERENCES `Niveau`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Referentiel` ADD CONSTRAINT `Referentiel_promotionId_fkey` FOREIGN KEY (`promotionId`) REFERENCES `Promotion`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
@@ -274,6 +337,18 @@ ALTER TABLE `Solution` ADD CONSTRAINT `Solution_postId_fkey` FOREIGN KEY (`postI
 ALTER TABLE `VoteSolution` ADD CONSTRAINT `VoteSolution_solutionId_fkey` FOREIGN KEY (`solutionId`) REFERENCES `Solution`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE `_CompetenceToNiveau` ADD CONSTRAINT `_CompetenceToNiveau_A_fkey` FOREIGN KEY (`A`) REFERENCES `Competence`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `_CompetenceToNiveau` ADD CONSTRAINT `_CompetenceToNiveau_B_fkey` FOREIGN KEY (`B`) REFERENCES `Niveau`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `_CompetenceToReferentiel` ADD CONSTRAINT `_CompetenceToReferentiel_A_fkey` FOREIGN KEY (`A`) REFERENCES `Competence`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `_CompetenceToReferentiel` ADD CONSTRAINT `_CompetenceToReferentiel_B_fkey` FOREIGN KEY (`B`) REFERENCES `Referentiel`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `_BriefToReferentiel` ADD CONSTRAINT `_BriefToReferentiel_A_fkey` FOREIGN KEY (`A`) REFERENCES `Brief`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -302,3 +377,15 @@ ALTER TABLE `_BriefToGroupe` ADD CONSTRAINT `_BriefToGroupe_A_fkey` FOREIGN KEY 
 
 -- AddForeignKey
 ALTER TABLE `_BriefToGroupe` ADD CONSTRAINT `_BriefToGroupe_B_fkey` FOREIGN KEY (`B`) REFERENCES `Groupe`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `_ProfilSortieToUtilisateur` ADD CONSTRAINT `_ProfilSortieToUtilisateur_A_fkey` FOREIGN KEY (`A`) REFERENCES `ProfilSortie`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `_ProfilSortieToUtilisateur` ADD CONSTRAINT `_ProfilSortieToUtilisateur_B_fkey` FOREIGN KEY (`B`) REFERENCES `Utilisateur`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `_ProfilSortieToPromotion` ADD CONSTRAINT `_ProfilSortieToPromotion_A_fkey` FOREIGN KEY (`A`) REFERENCES `ProfilSortie`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `_ProfilSortieToPromotion` ADD CONSTRAINT `_ProfilSortieToPromotion_B_fkey` FOREIGN KEY (`B`) REFERENCES `Promotion`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
