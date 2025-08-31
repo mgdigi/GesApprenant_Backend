@@ -9,7 +9,7 @@ export const createUserSchema = z.object({
   telephone: z.string().optional(),
   profilId: z.number(),          // obligatoire
   niveauId: z.number().optional(), 
-  statutAD: z.string().optional(),
+  statutAD: z.string().optional(), // optionnal: nullable
   referentielId: z.number().optional(),
   promotionId: z.number().optional(),
 });
