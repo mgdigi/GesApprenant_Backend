@@ -1,6 +1,8 @@
 import 'dotenv/config'; 
 import express from "express";
 import userRoutes from "./routes/Users.js";
+
+import tagRoutes from "./routes/Tags.js";
 import profilRoutes from "./routes/Profiles.js";
 import competenceRoutes from "./routes/Competences.js";
 import profilSortieRoutes from "./routes/Profils-sortie.js";
@@ -15,6 +17,8 @@ app.use("/profils", profilRoutes);
 app.use("/competences", competenceRoutes);
 app.use("/profils-sortie", profilSortieRoutes);
 app.use("/niveaux", niveauRoutes);
+
+app.use("/tags", tagRoutes)
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
