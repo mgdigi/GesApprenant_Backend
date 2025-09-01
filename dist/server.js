@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express from "express";
 import userRoutes from "./routes/Users.js";
+import referentielRoutes from "./routes/Referentiels.js";
 import tagRoutes from "./routes/Tags.js";
 import profilRoutes from "./routes/Profiles.js";
 import competenceRoutes from "./routes/Competences.js";
@@ -11,6 +12,7 @@ const PORT = process.env.PORT || 3003;
 const app = express();
 app.use(express.json());
 app.use("/users", userRoutes);
+app.use("/referentiels", referentielRoutes);
 app.use("/tags", tagRoutes);
 app.use("/profils", profilRoutes);
 app.use("/competences", competenceRoutes);
