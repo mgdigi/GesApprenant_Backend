@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { IProfilSortie } from "../interface/IProfilSortie.js";
+import { IProfilSortie } from "../types/interface/IProfilSortie.js";
 
 const prisma = new PrismaClient();
 
