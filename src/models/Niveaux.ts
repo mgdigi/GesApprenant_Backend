@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { INiveau } from "../interface/INiveau.js";
+import { INiveau } from "../types/interface/INiveau.js";
 
 const prisma = new PrismaClient();
 
