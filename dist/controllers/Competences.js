@@ -35,4 +35,10 @@ export class CompetenceController {
         await competenceModel.delete(id);
         res.status(204).send();
     }
+    async getNiveauxByCompetenceId(req, res) {
+        const id = +req.params.id;
+        const competence = await competenceModel.getNiveauxByCompetenceId(id);
+        (!competence) ? res.status(404).json({ message: "Aucun niveau trouvé pour cette compétence" }) :
+            res.json(competence.niveaux);
+    }
 }

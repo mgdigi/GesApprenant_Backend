@@ -33,4 +33,11 @@ export class CompetenceModel {
       return prisma.competence.delete({ where: { id } });
     }
 
+    async getNiveauxByCompetenceId(id: number) {
+        return prisma.competence.findUnique({
+            where: { id },
+            include: { niveaux: true }
+        });
+    }
+
 }
