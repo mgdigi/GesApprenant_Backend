@@ -1,5 +1,5 @@
 import  {PrismaClient} from '@prisma/client';
-import { ICompetence } from '../interface/ICompetence.js';
+import { ICompetence } from '../types/interface/ICompetence.js';
 
 const prisma = new PrismaClient();
 

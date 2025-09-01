@@ -8,7 +8,7 @@
     "build": "npx tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
     "seed": "npm run build && node -r dotenv/config dist/prisma/seed.js",
-    "dev": "nodemon dist/server.js"
+    "dev": "nodemon --ignore dist/ dist/server.js"
   },
   "keywords": [],
   "author": "",
