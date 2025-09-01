@@ -25,6 +25,6 @@ app.use("/referentiels", referentielRoutes);
 app.use("/promos", promoRoutes);
 
 
-app.listen(3000, () => {
+app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
