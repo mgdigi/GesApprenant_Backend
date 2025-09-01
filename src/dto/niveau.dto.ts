@@ -7,3 +7,4 @@ export const createNiveauSchema = z.object({
 });
 
 export const updateNiveauSchema = createNiveauSchema.partial();
+
