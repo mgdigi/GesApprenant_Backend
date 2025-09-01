@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import {ITag} from "../interface/ITag.js";
+import {ITag} from "../types/interface/ITag.js";
 
 const prisma = new PrismaClient();
 
