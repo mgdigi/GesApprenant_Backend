@@ -1,12 +1,14 @@
+import bcrypt from 'bcrypt';
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 async function main() {
     console.log("🚀 Démarrage du seed...");
     // --------- PROFILS ---------
-    const [adminProfil, apprenantProfil, formateurProfil] = await prisma.$transaction([
+    const [adminProfil, apprenantProfil, formateurProfil, cmProfil] = await prisma.$transaction([
         prisma.profil.create({ data: { libelle: "Administrateur" } }),
         prisma.profil.create({ data: { libelle: "Apprenant" } }),
         prisma.profil.create({ data: { libelle: "Formateur" } }),
+        prisma.profil.create({ data: { libelle: "CM" } }),
     ]);
     // --------- PROFIL SORTIE ---------
     const [devWebSortie, dataScienceSortie] = await prisma.$transaction([
@@ -73,7 +75,7 @@ async function main() {
                 nom: "Sane",
                 prenom: "Ousseynou",
                 email: "saneOuseynou@gmail.com",
-                password: "password123",
+                password: await bcrypt.hash("password123", 10),
                 adresse: "123 Rue Principale, Dakar",
                 telephone: "+221 78 011 82 23",
                 profilId: adminProfil.id,
@@ -82,7 +84,7 @@ async function main() {
                 nom: "Ka",
                 prenom: "Mamebousso",
                 email: "mamebousso@gmail.com",
-                password: "password123",
+                password: await bcrypt.hash("password123", 10),
                 adresse: "456 Avenue de la République, Dakar",
                 telephone: "+221 77 765 43 21",
                 profilId: apprenantProfil.id,
@@ -94,13 +96,22 @@ async function main() {
                 nom: "Wane",
                 prenom: "Baila",
                 email: "wanebaila@gmail.com",
-                password: "password123",
+                password: await bcrypt.hash("password123", 10),
                 adresse: "789 Boulevard de l'Indépendance, Dakar",
                 telephone: "+221 77 987 65 43",
                 profilId: formateurProfil.id,
-                niveauId: niveau1.id,
-                photo: "https://placehold.co/150x150",
+                niveauId: niveau1.id
             },
+            {
+                nom: "Niang",
+                prenom: "Amina",
+                email: "niangamina@gmail.com",
+                password: await bcrypt.hash("password123", 10),
+                adresse: "789 Boulevard de l'Indépendance, Dakar",
+                telephone: "+221 77 234 12 25",
+                profilId: cmProfil.id,
+                niveauId: niveau1.id
+            }
         ],
     });
     console.log("✅ Seed terminé avec succès !");

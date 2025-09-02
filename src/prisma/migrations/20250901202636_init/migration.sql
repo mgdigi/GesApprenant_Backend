@@ -22,6 +22,7 @@ CREATE TABLE `Utilisateur` (
     `referentielId` INTEGER NULL,
     `promotionId` INTEGER NULL,
 
+    UNIQUE INDEX `Utilisateur_email_key`(`email`),
     UNIQUE INDEX `Utilisateur_photo_key`(`photo`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -211,6 +212,17 @@ CREATE TABLE `Niveau` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `RefreshToken` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `token` VARCHAR(191) NOT NULL,
+    `userId` INTEGER NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    UNIQUE INDEX `RefreshToken_token_key`(`token`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `_CompetenceToNiveau` (
     `A` INTEGER NOT NULL,
     `B` INTEGER NOT NULL,
@@ -335,6 +347,9 @@ ALTER TABLE `Solution` ADD CONSTRAINT `Solution_postId_fkey` FOREIGN KEY (`postI
 
 -- AddForeignKey
 ALTER TABLE `VoteSolution` ADD CONSTRAINT `VoteSolution_solutionId_fkey` FOREIGN KEY (`solutionId`) REFERENCES `Solution`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `RefreshToken` ADD CONSTRAINT `RefreshToken_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `Utilisateur`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `_CompetenceToNiveau` ADD CONSTRAINT `_CompetenceToNiveau_A_fkey` FOREIGN KEY (`A`) REFERENCES `Competence`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

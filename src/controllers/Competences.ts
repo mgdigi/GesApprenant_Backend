@@ -19,11 +19,8 @@ export class CompetenceController {
     }
 
     async create(req: Request, res: Response){
-        const parsed = createCompetenceSchema.safeParse(req.body);
-        if(!parsed.success){
-            return res.status(400).json(parsed.error.format());
-        }
-        const competence = await competenceModel.create(parsed.data);
+        const data = req.body;
+        const competence = await competenceModel.create(data);
         res.status(201).json(competence);
     }
 

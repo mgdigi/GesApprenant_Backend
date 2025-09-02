@@ -1,5 +1,5 @@
 import { CompetenceModel } from "../models/Competences.js";
-import { createCompetenceSchema, updateCompetenceSchema } from "../dto/competence.dto.js";
+import { updateCompetenceSchema } from "../dto/competence.dto.js";
 const competenceModel = new CompetenceModel();
 export class CompetenceController {
     async getAll(req, res) {
@@ -14,11 +14,8 @@ export class CompetenceController {
             res.json(competence);
     }
     async create(req, res) {
-        const parsed = createCompetenceSchema.safeParse(req.body);
-        if (!parsed.success) {
-            return res.status(400).json(parsed.error.format());
-        }
-        const competence = await competenceModel.create(parsed.data);
+        const data = req.body;
+        const competence = await competenceModel.create(data);
         res.status(201).json(competence);
     }
     async update(req, res) {

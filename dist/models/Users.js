@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcrypt";
 const prisma = new PrismaClient();
 export class UserModel {
     async getAll() {
@@ -23,5 +24,11 @@ export class UserModel {
     }
     async delete(id) {
         return prisma.utilisateur.delete({ where: { id } });
+    }
+    async getByEmail(email) {
+        return prisma.utilisateur.findUnique({ where: { email } });
+    }
+    async verifyPassword(plainPassword, hashedPassword) {
+        return bcrypt.compare(plainPassword, hashedPassword);
     }
 }
