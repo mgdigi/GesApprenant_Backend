@@ -1,7 +1,7 @@
-import { PrismaClient } from "@prisma/client";
 import { IProfilSortie } from "../types/interface/IProfilSortie.js";
+import prisma from "../prisma/client.js";
 
-const prisma = new PrismaClient();
+
 
 export class ProfilSortieModel {
     async getAll(): Promise<IProfilSortie[]> {

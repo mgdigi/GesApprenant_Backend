@@ -10,11 +10,16 @@ import profilSortieRoutes from "./routes/Profils-sortie.js";
 import niveauRoutes from "./routes/Niveaux.js";
 import promoRoutes from "./routes/Promos.js";
 import authRoutes from "./routes/Auth.js";
+import { authMiddleware } from './middlewares/auth.js';
+
 
 const PORT = process.env.PORT || 3003;
 const app = express();
 app.use(express.json());
 
+app.use("/auth", authRoutes);
+
+app.use(authMiddleware);
 
 app.use("/users", userRoutes);
 app.use("/profils", profilRoutes);
@@ -24,7 +29,6 @@ app.use("/niveaux", niveauRoutes);
 app.use("/tags", tagRoutes)
 app.use("/referentiels", referentielRoutes);
 app.use("/promos", promoRoutes);
-app.use("/auth", authRoutes);
 
 
 app.listen(PORT, () => {

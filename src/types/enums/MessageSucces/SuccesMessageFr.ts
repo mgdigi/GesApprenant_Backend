@@ -1,6 +1,7 @@
 export enum SuccesMessageFR {
-    CREATED = "Créé avec succès",
+    CREATED = "Resource Créé avec succès",
     UPDATED = "Mis à jour avec succès",
     DELETED = "Supprimé avec succès",
-    FETCHED = "Récupéré avec succès"
+    FETCHED = "Récupéré avec succès",
+    SUCCESED = "Opération réussie"
 }

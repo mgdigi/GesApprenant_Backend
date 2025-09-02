@@ -1,7 +1,7 @@
-import { PrismaClient } from "@prisma/client";
 import { IProfil } from "../types/interface/IProfil.js";
+import prisma from "../prisma/client.js";
 
-const prisma = new PrismaClient();
+
 
 export class ProfilModel {
   async getAll() {

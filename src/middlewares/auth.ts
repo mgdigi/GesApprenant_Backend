@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
 import { ErreureMessageFR } from "../types/enums/MessageErreur/ErreurMessageFr.js";
+import { verifyAccessToken } from "../utils/jwt.js";
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
 
@@ -11,8 +11,8 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
   const token = authHeader.split(" ")[1];
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
-    (req as any).user = decoded; 
+    const decoded = verifyAccessToken(token);
+    (req).user = decoded; 
     next();
   } catch (error) {
     return res.status(403).json({ message: ErreureMessageFR.TOKEN_INVALID });
@@ -22,7 +22,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
 export const authorizeRoles = (...roles: string[]) => {
     return (req: Request, res: Response, next: NextFunction) => {
         const user = (req as any).user;
-        if (!user || !roles.includes(user.role)) {
+        if (!user || !roles.includes(user.profil.libelle.toLowerCase())) {
             return res.status(403).json({ message: ErreureMessageFR.FORBIDDEN });
         }
         next();

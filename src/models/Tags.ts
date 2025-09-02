@@ -1,7 +1,6 @@
-import { PrismaClient } from "@prisma/client";
 import {ITag} from "../types/interface/ITag.js";
+import prisma from "../prisma/client.js";
 
-const prisma = new PrismaClient();
 
 export class TagModel
 {

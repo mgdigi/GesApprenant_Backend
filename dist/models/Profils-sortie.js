@@ -1,5 +1,4 @@
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+import prisma from "../prisma/client.js";
 export class ProfilSortieModel {
     async getAll() {
         return prisma.profilSortie.findMany({ include: { utilisateurs: true, promotions: true } });

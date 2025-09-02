@@ -1,13 +1,15 @@
 import { Router } from "express";
 import { UserController } from "../controllers/Users.js";
+import { validateBody } from "../middlewares/validation.js";
+import { createUserSchema, updateUserSchema } from "../dto/user.dto.js";
 
 const router = Router();
 const controller = new UserController();
 
 router.get("/", controller.getAll.bind(controller));
 router.get("/:id", controller.getById.bind(controller));
-router.post("/", controller.create.bind(controller));
-router.put("/:id", controller.update.bind(controller));
+router.post("/", validateBody(createUserSchema), controller.create.bind(controller));
+router.put("/:id", validateBody(updateUserSchema), controller.update.bind(controller));
 router.delete("/:id", controller.delete.bind(controller));
 router.patch("/:id", controller.update.bind(controller));
 

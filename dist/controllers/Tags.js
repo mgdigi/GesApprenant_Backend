@@ -1,5 +1,4 @@
 import { TagModel } from "../models/Tags.js";
-import { createTagSchema, updateTagSchema } from "../dto/tag.dto.js";
 const tagModel = new TagModel();
 export class TagController {
     async getAll(req, res) {
@@ -14,20 +13,14 @@ export class TagController {
             : res.status(200).json(tag);
     }
     async create(req, res) {
-        const data = createTagSchema.safeParse(req.body); //verifie si les données saisie sont valides
-        if (!data.success) {
-            res.status(400).json(data.error.format());
-        }
+        const data = req.body; //verifie si les données saisie sont valides
         const tagCreate = await tagModel.create(data.data);
         return res.status(201).json(tagCreate);
     }
     async update(req, res) {
         const id = +req.params.id;
-        const data = updateTagSchema.safeParse(req.body);
-        if (!data.success) {
-            res.status(400).json(data.error.format);
-        }
-        const tagUpdate = await tagModel.update(id, data.data);
+        const data = req.body;
+        const tagUpdate = await tagModel.update(id, data);
         return res.status(201).json(tagUpdate);
     }
     async delete(req, res) {

@@ -1,5 +1,4 @@
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+import prisma from "../prisma/client.js";
 export class TagModel {
     async getAll() {
         return prisma.tag.findMany();

@@ -1,6 +1,5 @@
-import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
-const prisma = new PrismaClient();
+import prisma from "../prisma/client.js";
 export class UserModel {
     async getAll() {
         return prisma.utilisateur.findMany({
@@ -30,5 +29,13 @@ export class UserModel {
     }
     async verifyPassword(plainPassword, hashedPassword) {
         return bcrypt.compare(plainPassword, hashedPassword);
+    }
+    async createRefreshToken(token, userId) {
+        return prisma.refreshToken.create({
+            data: {
+                token,
+                userId
+            }
+        });
     }
 }

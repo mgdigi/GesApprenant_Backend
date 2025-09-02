@@ -1,7 +1,6 @@
-import  {PrismaClient} from '@prisma/client';
 import { ICompetence } from '../types/interface/ICompetence.js';
+import prisma from "../prisma/client.js";
 
-const prisma = new PrismaClient();
 
 
 export class CompetenceModel {

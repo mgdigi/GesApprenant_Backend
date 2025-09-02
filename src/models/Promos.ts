@@ -1,7 +1,6 @@
-import { PrismaClient} from "@prisma/client";
+import prisma from "../prisma/client.js";
 import { IPromotions } from "../types/interface/IPromotion.js";
 
-const prisma = new PrismaClient();
 
 export class PromotionModel {
   async getAll() {

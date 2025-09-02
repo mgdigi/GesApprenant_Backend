@@ -1,7 +1,6 @@
-import { PrismaClient } from "@prisma/client";
 import { INiveau } from "../types/interface/INiveau.js";
+import prisma from "../prisma/client.js";
 
-const prisma = new PrismaClient();
 
 export class NiveauModel {
   async getAll(): Promise<INiveau[]> {

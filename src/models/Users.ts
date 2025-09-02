@@ -1,9 +1,9 @@
-import { PrismaClient } from "@prisma/client";
 import { IUsers } from "../types/interface/IUser.js";
 import bcrypt from "bcrypt";
+import prisma from "../prisma/client.js";
 
 
-const prisma = new PrismaClient();
+
 
 export class UserModel {
   async getAll() {
@@ -40,5 +40,14 @@ export class UserModel {
 
   async verifyPassword(plainPassword: string, hashedPassword: string): Promise<boolean> {
     return bcrypt.compare(plainPassword, hashedPassword);
+  }
+
+  async createRefreshToken(token: string, userId: number) {
+    return prisma.refreshToken.create({
+      data: {
+        token,
+        userId
+      }
+    });
   }
 }

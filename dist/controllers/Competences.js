@@ -1,16 +1,17 @@
 import { CompetenceModel } from "../models/Competences.js";
-import { updateCompetenceSchema } from "../dto/competence.dto.js";
+import { ErreurHandler } from "../middlewares/ErreurHandler.js";
 const competenceModel = new CompetenceModel();
+const handleError = new ErreurHandler();
 export class CompetenceController {
-    async getAll(req, res) {
+    async getAll(req, res, next) {
         const competences = await competenceModel.getAll();
-        (!competences) ? res.status(404).json({ message: "Aucune compétence trouvée" }) :
+        (!competences) ? handleError.notFound(req, res, next) :
             res.json(competences);
     }
-    async getById(req, res) {
+    async getById(req, res, next) {
         const id = +req.params.id;
         const competence = await competenceModel.getById(id);
-        (!competence) ? res.status(404).json({ message: "Compétence non trouvée" }) :
+        (!competence) ? handleError.notFound(req, res, next) :
             res.json(competence);
     }
     async create(req, res) {
@@ -20,11 +21,8 @@ export class CompetenceController {
     }
     async update(req, res) {
         const id = Number(req.params.id);
-        const parsed = updateCompetenceSchema.safeParse(req.body);
-        if (!parsed.success) {
-            return res.status(400).json(parsed.error.format());
-        }
-        const competence = await competenceModel.update(id, parsed.data);
+        const data = req.body;
+        const competence = await competenceModel.update(id, data);
         res.json(competence);
     }
     async delete(req, res) {
@@ -32,10 +30,10 @@ export class CompetenceController {
         await competenceModel.delete(id);
         res.status(204).send();
     }
-    async getNiveauxByCompetenceId(req, res) {
+    async getNiveauxByCompetenceId(req, res, next) {
         const id = +req.params.id;
         const competence = await competenceModel.getNiveauxByCompetenceId(id);
-        (!competence) ? res.status(404).json({ message: "Aucun niveau trouvé pour cette compétence" }) :
+        (!competence) ? handleError.notFound(req, res, next) :
             res.json(competence.niveaux);
     }
 }

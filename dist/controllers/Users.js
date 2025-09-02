@@ -1,33 +1,28 @@
 import { UserModel } from "../models/Users.js";
-import { createUserSchema, updateUserSchema } from "../dto/user.dto.js";
+import { ErreurHandler } from "../middlewares/ErreurHandler.js";
+const handleError = new ErreurHandler();
 const userModel = new UserModel();
 export class UserController {
     async getAll(req, res) {
         const users = await userModel.getAll();
         res.json(users);
     }
-    async getById(req, res) {
+    async getById(req, res, next) {
         const id = Number(req.params.id);
         const user = await userModel.getById(id);
         if (!user)
-            return res.status(404).json({ message: "Utilisateur non trouvé" });
+            return handleError.notFound(req, res, next);
         res.json(user);
     }
     async create(req, res) {
-        const parsed = createUserSchema.safeParse(req.body);
-        if (!parsed.success) {
-            return res.status(400).json(parsed.error.format());
-        }
-        const user = await userModel.create(parsed.data);
+        const data = req.body;
+        const user = await userModel.create(data);
         res.status(201).json(user);
     }
     async update(req, res) {
         const id = Number(req.params.id);
-        const parsed = updateUserSchema.safeParse(req.body);
-        if (!parsed.success) {
-            return res.status(400).json(parsed.error.format());
-        }
-        const user = await userModel.update(id, parsed.data);
+        const data = req.body;
+        const user = await userModel.update(id, data);
         res.json(user);
     }
     async delete(req, res) {
